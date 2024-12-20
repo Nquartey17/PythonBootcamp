@@ -1,3 +1,11 @@
+print('''   __________
+        /\____;;___\
+       | /         /
+       `. ())oo() .
+        |\(%()*^^()^\
+       %| |-%-------|
+      % \ | %  ))   |
+      %  \|%________|''')
 print("Welcome to Treasure Island.\nYour missions is to find the treasure")
 direction = input("left or right? ")
 if direction == "left" or direction == "l":
