@@ -14,11 +14,11 @@ nr_numbers = int(input(f"How many numbers would you like?\n"))
 total_length = nr_numbers + nr_symbols + nr_letters
 ans = []
 for i in range(0, nr_letters):
-    ans.append(letters[random.randint(0, len(letters)-1)])
+    ans.append(random.choice(letters))
 for i in range(0, nr_symbols): # Symbol
-    ans.append(symbols[random.randint(0, len(symbols)-1)])
+    ans.append(random.choice(symbols))
 for i in range(0, nr_numbers): # Number
-    ans.append(numbers[random.randint(0, len(numbers)-1)])
+    ans.append(random.choice(numbers))
 print(ans)
 
 # Hard Level - Order of characters randomised:
