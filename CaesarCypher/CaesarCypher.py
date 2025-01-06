@@ -32,17 +32,15 @@ def caesar(original_text, shift_amount, action):
     result_text = ""
 
     for letter in original_text:
-        shifted_position = alphabet.index(letter)
-        if action == "encode":
-            shifted_position += shift_amount
-            shifted_position %= len(alphabet)
 
-        elif action == "decode":
-            shifted_position -= shift_amount
-            if shifted_position < 0:
-                shifted_position += len(alphabet)
 
-        result_text += alphabet[shifted_position]
-    print(result_text)
+        if action == "decode":
+            shift_amount *= -1 # Subtracts instead of multiplies
+
+        shift_amount = alphabet.index(letter) + shift_amount
+        shift_amount %= len(alphabet)
+        result_text += alphabet[shift_amount]
+
+    print(f"Here is the {action}d result: {result_text}")
 
 caesar(text, shift, direction)
