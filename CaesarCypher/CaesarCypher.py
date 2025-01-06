@@ -1,46 +1,38 @@
+from operator import truediv
+
+import art
+
+print(art.logo)
+
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
-direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
-text = input("Type your message:\n").lower()
-shift = int(input("Type the shift number:\n"))
+def caesar(original_text, shift_amount, encode_or_decode):
+    output_text = ""
 
-# def encrypt(original_text, shift_amount):
-#     result_text = ""
-#     for letter in original_text:
-#         shifted_position = alphabet.index(letter) + shift_amount
-#
-#         shifted_position %= len(alphabet)
-#         result_text += alphabet[shifted_position]
-#     print(result_text)
-#
-# encrypt(text, shift)
-#
-# def decrypt(original_text, shift_amount):
-#     decrypted_word = ""
-#     for letter in original_text:
-#         position_shift = alphabet.index(letter) - shift_amount
-#
-#         if position_shift < 0:
-#             position_shift += len(alphabet)
-#         decrypted_word += alphabet[position_shift]
-#     print(decrypted_word)
-
-# decrypt(text, shift)
-
-
-def caesar(original_text, shift_amount, action):
-    result_text = ""
-
+    if encode_or_decode == "decode":
+        shift_amount *= -1
     for letter in original_text:
+        if letter not in alphabet:
+            output_text += letter
+
+        else:
+            shifted_position = alphabet.index(letter) + shift_amount
+            shifted_position %= len(alphabet)
+            output_text += alphabet[shifted_position]
+    print(f"Here is the {encode_or_decode}d result: {output_text}")
 
 
-        if action == "decode":
-            shift_amount *= -1 # Subtracts instead of multiplies
+keep_playing = True
 
-        shift_amount = alphabet.index(letter) + shift_amount
-        shift_amount %= len(alphabet)
-        result_text += alphabet[shift_amount]
+while keep_playing:
+    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
+    text = input("Type your message:\n").lower()
+    shift = int(input("Type the shift number:\n"))
 
-    print(f"Here is the {action}d result: {result_text}")
+    caesar(original_text=text, shift_amount=shift, encode_or_decode=direction)
+    continue_game = input("Do you want to continue? Enter yes or no ").lower()
+    if continue_game == "no":
+        keep_playing = False
 
-caesar(text, shift, direction)
+
+
