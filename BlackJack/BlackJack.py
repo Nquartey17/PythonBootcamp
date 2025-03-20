@@ -6,12 +6,11 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 max_score = 21
 
 start_game = True
-keep_drawing = True
 
 player_cards = []
-player_total = 0
 computer_cards = []
 computer_total = 0
+player_total = 0
 
 def get_card():
     return random.choice(cards)
@@ -25,16 +24,24 @@ def total_score(selected_list):
 def print_player_score(selected_list, score ):
     print(f"Your cards: {selected_list}, current score: {score}")
 
+def over_21(total_score, keep_drawing):
+    if total_score > 21:
+        keep_drawing = False
+    else:
+        print_player_score(player_cards, player_total)
+
 while start_game:
     play_game = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
 
     if play_game == "y":
+        #reset all values
         player_cards.clear()
         computer_cards.clear()
+        keep_drawing = True
+
         print(art.logo)
 
         # Get 2 cards for player and computer, Remember 11 can also be 1
-        # ISSUE- ROUNDS ENDING AFTER FIRST DRAW
         player_cards.append(get_card())
         player_cards.append(get_card())
         player_total = total_score(player_cards)
@@ -49,18 +56,18 @@ while start_game:
         print(f"Computer's first card: {computer_cards[0]}")
 
         #Keep asking this while score isn't over 21
-        while keep_drawing and player_total <= 21:
+        while keep_drawing:
             draw_again = input("Type 'y' to get another card, type 'n' to pass: ")
             if draw_again == "y":
                 checked_value = get_card()
                 if checked_value == 11 and (player_total + checked_value) > max_score:
                     player_cards.append(1)
                     player_total = total_score(player_cards)
-                    print_player_score(player_cards, player_total)
+                    over_21(player_total, keep_drawing)
                 else:
                     player_cards.append(checked_value)
                     player_total = total_score(player_cards)
-                    print_player_score(player_cards, player_total)
+                    over_21(player_total, keep_drawing)
             else:
                 keep_drawing = False
 
