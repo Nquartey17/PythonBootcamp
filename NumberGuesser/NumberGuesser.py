@@ -5,7 +5,6 @@ ANSWER = random.randint(1,100)
 EASY = 10
 HARD = 5
 attempts = 0
-user_guess = 0
 
 #Game start
 print(art.logo)
