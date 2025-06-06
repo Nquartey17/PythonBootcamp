@@ -10,4 +10,4 @@ question = QuizBrain(question_bank)
 while question.still_has_questions():
     question.next_question()
 
-
+print(f"Your final score: {question.score}/{question.question_number}")
