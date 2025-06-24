@@ -20,16 +20,18 @@ def random_color():
     return my_tuple
 
 
-angles = [0,90,180,270]
-turtle.pensize(10)
 #increase/decrease animation speed
 turtle.speed("fastest")
 
-#Random walk
-for _ in range(100):
-    turtle.color(random_color())
-    turtle.setheading(random.choice(angles))
-    turtle.forward(50)
+# Setting the radius of the circle
+radius = 100
 
+def create_circle(spacing):
+    for _ in range(int(360 / spacing)):
+        turtle.color(random_color())
+        turtle.circle(radius)
+        turtle.setheading(turtle.heading() + 10)
+
+create_circle(10)
 
 screen.exitonclick()
