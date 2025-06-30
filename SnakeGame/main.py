@@ -4,7 +4,7 @@ from snake import Snake
 from food import Food
 import time
 
-BOUNDS = 280
+BOUNDS = 290
 
 screen = Screen()
 screen.setup(width=600, height=600)
@@ -32,11 +32,20 @@ while game_start:
     # if snake head is within 15 pixels of the food
     if snake.head.distance(food) < 15:
         food.move_food()
+        snake.extend()
         scoreboard.update_score()
 
-    #Detect wall collision
+    # Detect wall collision
     if snake.head.xcor() > BOUNDS or snake.head.xcor() < -BOUNDS or snake.head.ycor() > BOUNDS or snake.head.ycor() < -BOUNDS:
         game_start = False
         scoreboard.game_over()
+
+    # Collision with body
+    for segment in snake.snake_body:
+        if segment == snake.head:
+            pass
+        if snake.head.distance(segment) < 10:
+            game_start = False
+            scoreboard.game_over()
 
 screen.exitonclick()
