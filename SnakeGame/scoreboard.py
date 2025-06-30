@@ -13,8 +13,11 @@ class Scoreboard(Turtle):
         #Don't use arguments with variable if you want to format text
         self.write(f"Score = {self.score}", align=ALIGNMENT, font=FONT)
 
-
     def update_score(self):
         self.score += 1
         self.undo()
         self.write(f"Score = {self.score}", align=ALIGNMENT, font=FONT)
+
+    def game_over(self):
+        self.goto(0,0)
+        self.write("GAME OVER", align=ALIGNMENT, font=FONT)
