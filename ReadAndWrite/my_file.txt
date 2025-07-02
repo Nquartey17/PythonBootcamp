@@ -1,0 +1,3 @@
+Sample text file
+reading and writing files
+New text.
