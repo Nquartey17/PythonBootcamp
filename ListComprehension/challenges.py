@@ -8,4 +8,3 @@ list_of_strings = ['9', '0', '32', '8', '2', '8', '64', '29', '42', '99']
 numbers_2 = [int(num) for num in list_of_strings]
 result = [num for num in numbers_2 if num % 2 == 0]
 print(result)
-
