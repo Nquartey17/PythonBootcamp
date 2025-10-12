@@ -1,6 +1,8 @@
 from tkinter import *
 import math
 
+from pandas.core.internals.construction import reorder_arrays
+
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
@@ -11,8 +13,17 @@ WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 reps = 0
+timer = None
 
 # ---------------------------- TIMER RESET ------------------------------- # 
+
+def reset_timer():
+    window.after_cancel(timer)
+    canvas.itemconfig(timer_text, text="00:00")
+    timer_label.config(text="Timer")
+    checkmark.config(text="")
+    global reps
+    reps = 0
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
@@ -28,13 +39,13 @@ def start_timer():
 
     if reps == 8:
         count_down(long_break)
-        timer_label.config(text="Long Break", fg=GREEN)
+        timer_label.config(text="Break", fg=GREEN)
     elif reps % 2 != 0:
         count_down(work_seconds)
         timer_label.config(text="Work", fg=RED)
     else:
         count_down(short_break)
-        timer_label.config(text="Short Break", fg=PINK)
+        timer_label.config(text="Break", fg=PINK)
 
 
 
@@ -50,10 +61,17 @@ def count_down(count):
     canvas.itemconfig(timer_text, text=f"{count_minute}:{count_seconds}")
 
     if count > 0:
+        global timer
         # after set time in ms, function, **args input(s) to add to function
-        window.after(1000, count_down, count - 1)
+        timer = window.after(1000, count_down, count - 1)
     else:
+        # text="✔"
         start_timer()
+        #Checkmark with each completed work session
+        mark = ""
+        for _ in range(math.floor(reps/2)):
+            mark += "✔"
+        checkmark.config(text="mark")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -72,10 +90,10 @@ timer_label.grid(row=0,column=1)
 start_button = Button(text="Start", command=start_timer)
 start_button.grid(row=2,column=0)
 
-reset_button = Button(text="Reset")
+reset_button = Button(text="Reset", command=reset_timer)
 reset_button.grid(row=2,column=2)
 
-checkmark = Label(text="✔", fg=GREEN, bg=YELLOW)
+checkmark = Label(fg=GREEN, bg=YELLOW)
 checkmark.grid(row=3, column=1)
 
 
