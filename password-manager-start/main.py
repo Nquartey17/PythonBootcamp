@@ -1,15 +1,26 @@
 from tkinter import *
+from tkinter import messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save_password():
-    with open("password.txt", "a") as f:
-        f.write(f"Website: {web_box.get()}\n"
-                f"Email: {email_box.get()}\n"
-                f"Password: {password_box.get()}\n\n")
-    web_box.delete(0,END)
-    password_box.delete(0, END)
-    print("Saved")
+    if len(web_box.get()) == 0 or len(email_box.get()) == 0 or len(password_box.get()) == 0:
+        messagebox.showwarning(title="Warning", message="Make sure all fields have values")
+
+    else:
+        is_ok = messagebox.askokcancel(title=web_box.get(), message=f"Details entered:\nEmail: {email_box.get()}\nPassword: {password_box.get()}\n"
+                                       f"Do you want to save these inputs?")
+
+        if is_ok:
+            with open("password.txt", "a") as f:
+                f.write(f"Website: {web_box.get()}\n"
+                        f"Email: {email_box.get()}\n"
+                        f"Password: {password_box.get()}\n\n")
+            web_box.delete(0, END)
+            password_box.delete(0, END)
+            print("Saved")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 
