@@ -1,6 +1,27 @@
 from tkinter import *
 from tkinter import messagebox
+from random import choice, randint, shuffle
+import pyperclip
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+def random_password():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+
+    password_letters = [choice(letters) for _ in range(randint(8, 10))]
+    password_symbols = [choice(numbers) for _ in range(randint(2, 4))]
+    password_numbers = [choice(symbols) for _ in range(randint(2, 4))]
+
+    password_list = password_letters + password_symbols + password_numbers
+    shuffle(password_list)
+
+    #Join password tuple by ""
+    rand_password = "".join(password_list)
+    password_box.delete(0, END) #clear password input if something already exists
+    password_box.insert(0, rand_password)
+    pyperclip.copy(rand_password) #password saved to clipboard
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save_password():
@@ -52,7 +73,7 @@ password_box = Entry(width=21)
 password_box.grid(row=3, column=1, sticky="EW")
 
 #Buttons
-generate_password = Button(text="Generate Password")
+generate_password = Button(text="Generate Password",command=random_password)
 generate_password.grid(row=3, column=2, columnspan=1)
 add_button = Button(width=36, text="Add", command=save_password)
 add_button.grid(row=4, column=1, columnspan=2, sticky="EW")
