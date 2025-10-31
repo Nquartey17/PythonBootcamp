@@ -43,19 +43,25 @@ def save_password():
         #                                f"Do you want to save these inputs?")
 
         # if is_ok:
-        with open("password.json", "r") as file:
-            # json.dump(new_data, file, indent=4) write to new json file
-            #Read old data
-            data = json.load(file)
+
+        try:
+            with open("password.json", "r") as data_file:
+                #Read old data
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open("password.json", "w") as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
             #Update old data [new_data in this case] with new data
             data.update(new_data)
 
-        with open("password.json", "w") as file:
-            #Saving updated data
-            json.dump(data, file, indent=4)
-        web_box.delete(0, END)
-        password_box.delete(0, END)
-        print("Saved")
+            with open("password.json", "w") as data_file:
+                #Saving updated data
+                json.dump(data, data_file, indent=4)
+        finally:
+            web_box.delete(0, END)
+            password_box.delete(0, END)
+            print("Saved")
 
 
 # ---------------------------- UI SETUP ------------------------------- #
