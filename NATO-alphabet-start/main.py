@@ -1,11 +1,22 @@
+# Keyword Method with iterrows()
+# {new_key:new_value for (index, row) in df.iterrows()}
+
 import pandas
 
-df = pandas.read_csv("nato_phonetic_alphabet.csv")
-# print(df)
+data = pandas.read_csv("nato_phonetic_alphabet.csv")
 
-letter_df = {row.letter:row.code for (index, row) in df.iterrows()}
-print(letter_df.items())
+phonetic_dict = {row.letter: row.code for (index, row) in data.iterrows()}
+print(phonetic_dict)
 
-name = input("Enter a word: ").upper()
-nato_name = [letter_df[letter] for letter in name if letter in letter_df.keys()]
-print(nato_name)
+invalid_word = True
+
+while invalid_word:
+    word = input("Enter a word: ").upper()
+    try:
+        output_list = [phonetic_dict[letter] for letter in word]
+    except KeyError:
+        print("Invalid input. Make sure only letters are enter")
+    else:
+        print(output_list)
+        invalid_word = False
+
