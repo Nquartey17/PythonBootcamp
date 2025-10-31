@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
 import pyperclip
+import json
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def random_password():
@@ -25,21 +26,36 @@ def random_password():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save_password():
-    if len(web_box.get()) == 0 or len(email_box.get()) == 0 or len(password_box.get()) == 0:
+    website = web_box.get()
+    email = email_box.get()
+    user_password = password_box.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": user_password
+        }
+    }
+    if len(website) == 0 or len(email) == 0 or len(user_password) == 0:
         messagebox.showwarning(title="Warning", message="Make sure all fields have values")
 
     else:
-        is_ok = messagebox.askokcancel(title=web_box.get(), message=f"Details entered:\nEmail: {email_box.get()}\nPassword: {password_box.get()}\n"
-                                       f"Do you want to save these inputs?")
+        # is_ok = messagebox.askokcancel(title=web_box.get(), message=f"Details entered:\nEmail: {email_box.get()}\nPassword: {password_box.get()}\n"
+        #                                f"Do you want to save these inputs?")
 
-        if is_ok:
-            with open("password.txt", "a") as f:
-                f.write(f"Website: {web_box.get()}\n"
-                        f"Email: {email_box.get()}\n"
-                        f"Password: {password_box.get()}\n\n")
-            web_box.delete(0, END)
-            password_box.delete(0, END)
-            print("Saved")
+        # if is_ok:
+        with open("password.json", "r") as file:
+            # json.dump(new_data, file, indent=4) write to new json file
+            #Read old data
+            data = json.load(file)
+            #Update old data [new_data in this case] with new data
+            data.update(new_data)
+
+        with open("password.json", "w") as file:
+            #Saving updated data
+            json.dump(data, file, indent=4)
+        web_box.delete(0, END)
+        password_box.delete(0, END)
+        print("Saved")
 
 
 # ---------------------------- UI SETUP ------------------------------- #
