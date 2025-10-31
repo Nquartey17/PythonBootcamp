@@ -24,9 +24,23 @@ def random_password():
     password_box.insert(0, rand_password)
     pyperclip.copy(rand_password) #password saved to clipboard
 
+def find_password():
+    try:
+        with open("password.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "File of saved password does not exist. Enter values to create file")
+
+    key_name = web_box.get().upper() #uppercase to avoid case sensitivity
+    if key_name in data:
+        messagebox.showinfo(f"Values for {key_name}", f"Email: {data[key_name]['email']}\n"
+                                                      f"Password: {data[key_name]['password']}")
+    else:
+        messagebox.showwarning("Notice",f"'{key_name}' was not found in saved passwords")
+
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save_password():
-    website = web_box.get()
+    website = web_box.get().upper()
     email = email_box.get()
     user_password = password_box.get()
     new_data = {
@@ -39,29 +53,29 @@ def save_password():
         messagebox.showwarning(title="Warning", message="Make sure all fields have values")
 
     else:
-        # is_ok = messagebox.askokcancel(title=web_box.get(), message=f"Details entered:\nEmail: {email_box.get()}\nPassword: {password_box.get()}\n"
-        #                                f"Do you want to save these inputs?")
+        is_ok = messagebox.askokcancel(title=web_box.get(), message=f"Details entered:\nEmail: {email_box.get()}\nPassword: {password_box.get()}\n"
+                                       f"Do you want to save these inputs?")
 
-        # if is_ok:
+        if is_ok:
 
-        try:
-            with open("password.json", "r") as data_file:
-                #Read old data
-                data = json.load(data_file)
-        except FileNotFoundError:
-            with open("password.json", "w") as data_file:
-                json.dump(new_data, data_file, indent=4)
-        else:
-            #Update old data [new_data in this case] with new data
-            data.update(new_data)
+            try:
+                with open("password.json", "r") as data_file:
+                    #Read old data
+                    data = json.load(data_file)
+            except FileNotFoundError:
+                with open("password.json", "w") as data_file:
+                    json.dump(new_data, data_file, indent=4)
+            else:
+                #Update old data [new_data in this case] with new data
+                data.update(new_data)
 
-            with open("password.json", "w") as data_file:
-                #Saving updated data
-                json.dump(data, data_file, indent=4)
-        finally:
-            web_box.delete(0, END)
-            password_box.delete(0, END)
-            print("Saved")
+                with open("password.json", "w") as data_file:
+                    #Saving updated data
+                    json.dump(data, data_file, indent=4)
+            finally:
+                web_box.delete(0, END)
+                password_box.delete(0, END)
+                messagebox.showinfo("Saved","Password saved")
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -85,8 +99,8 @@ password = Label(text="Password:")
 password.grid(row=3, column=0)
 
 #Entries
-web_box = Entry(width=35)
-web_box.grid(row=1, column=1, columnspan=2, sticky="EW")
+web_box = Entry(width=21)
+web_box.grid(row=1, column=1, sticky="EW")
 web_box.focus() #cursor will automatically start here
 email_box = Entry(width=35)
 email_box.grid(row=2, column=1, columnspan=2, sticky="EW")
@@ -99,6 +113,8 @@ generate_password = Button(text="Generate Password",command=random_password)
 generate_password.grid(row=3, column=2, columnspan=1)
 add_button = Button(width=36, text="Add", command=save_password)
 add_button.grid(row=4, column=1, columnspan=2, sticky="EW")
+search_button = Button(text="Search", command=find_password)
+search_button.grid(row=1, column=2, columnspan=1,sticky="EW")
 
 
 
