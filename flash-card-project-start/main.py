@@ -1,10 +1,22 @@
+from os import remove
 from tkinter import *
 import pandas, random
 
 BACKGROUND_COLOR = "#B1DDC6"
-df = pandas.read_csv("data/french_words.csv")
+to_learn = {}
+
+try:
+    #look for saved file
+    df = pandas.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    #Read from populated list if save file isn't found
+    original_data = pandas.read_csv("data/french_words.csv")
+    to_learn = original_data.to_dict(orient="records")
+else:
+    to_learn = df.to_dict(orient="records")
+
 words = df.to_dict(orient='records')
-print(words[0])
+# print(words[0])
 current_card = {} #initialize global variable
 
 #Functions
@@ -22,6 +34,11 @@ def flip_card():
     canvas.itemconfig(language_title, text="English", fill="white")
     canvas.itemconfig(language_word, text=current_card["English"], fill="white")
 
+def word_known():
+    words.remove(current_card)
+    data = pandas.DataFrame(words)
+    data.to_csv("data/words_to_learn.csv", index=False) #index false stops index numbers from being added repeatedly after save
+    random_card()
 
 #window
 window = Tk()
@@ -48,7 +65,7 @@ wrong_button = Button(image=wrong_img, highlightthickness=0, command=random_card
 wrong_button.grid(row=1,column=0)
 
 check_img = PhotoImage(file="images/right.png")
-right_button = Button(image=check_img, highlightthickness=0, command=random_card)
+right_button = Button(image=check_img, highlightthickness=0, command=word_known)
 right_button.grid(row=1,column=1)
 
 random_card() # Start program with random card
