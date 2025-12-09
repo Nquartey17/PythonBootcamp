@@ -12,7 +12,7 @@ for question in question_data:
 
 
 quiz = QuizBrain(question_bank)
-quiz_ui = QuizInterface() #mainloop is a while loop so make sure other while loops aren't nearby
+quiz_ui = QuizInterface(quiz) #mainloop is a while loop so make sure other while loops aren't nearby
 
 # while quiz.still_has_questions():
 #     quiz.next_question()
