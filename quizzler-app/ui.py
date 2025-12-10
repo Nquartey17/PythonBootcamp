@@ -23,11 +23,11 @@ class QuizInterface:
 
         #Buttons (since aren't used anywhere else in the class, self.[name] isn't needed
         true_img = PhotoImage(file="images/true.png")
-        self.true_button = Button(image=true_img, highlightthickness=0)
+        self.true_button = Button(image=true_img, highlightthickness=0, command=self.true_pressed)
         self.true_button.grid(row=2, column=0)
 
         false_img = PhotoImage(file="images/false.png")
-        self.false_button = Button(image=false_img, highlightthickness=0)
+        self.false_button = Button(image=false_img, highlightthickness=0, command=self.false_pressed)
         self.false_button.grid(row=2, column=1)
 
         self.get_next_question()
@@ -35,5 +35,27 @@ class QuizInterface:
         self.window.mainloop()
 
     def get_next_question(self):
-        question_text = self.quiz.next_question()
-        self.canvas.itemconfig(self.questions, text=question_text)
+        self.canvas.config(bg="white")
+        if self.quiz.still_has_questions():
+            self.score.config(text=f"Score: {self.quiz.score}")
+            question_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.questions, text=question_text)
+        else:
+            self.canvas.itemconfig(self.questions, text=f"Quiz complete. Final score {self.quiz.score}/10")
+            self.true_button.config(state="disabled") #Disable buttons from color change
+            self.false_button.config(state="disabled")
+
+    def true_pressed(self):
+        self.feedback(self.quiz.check_answer("True"))
+
+    def false_pressed(self):
+        self.feedback(self.quiz.check_answer("False"))
+
+
+    def feedback(self, is_right):
+        if is_right:
+            self.canvas.config(bg="green")
+
+        else:
+            self.canvas.config(bg="red")
+        self.window.after(1000, self.get_next_question)
