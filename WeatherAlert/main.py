@@ -1,6 +1,7 @@
 import requests
+import os
 
-api_key = "f6da2c90c159c35437fa837e6f7b4869"
+api_key = os.getenv('owm_api_key')
 api = "https://api.openweathermap.org/data/2.5/weather?q=Woodbridge,VA,US&appid=f6da2c90c159c35437fa837e6f7b4869"
 OWM_Endpoint = "https://api.openweathermap.org/data/2.5/forecast"
 
