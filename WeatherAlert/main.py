@@ -1,7 +1,7 @@
 import requests
 
 
-api_key = "INSERT_API_KEY_HERE"
+api_key = "INSERT_API_KEY"
 api = "https://api.openweathermap.org/data/2.5/weather?q=Woodbridge,VA,US&appid=f6da2c90c159c35437fa837e6f7b4869"
 OWM_Endpoint = "https://api.openweathermap.org/data/2.5/forecast"
 
