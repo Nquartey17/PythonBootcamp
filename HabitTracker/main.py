@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 # view graph here -> "https://pixe.la/v1/users/nquartey/graphs/graph1.html"
 USERNAME = "nquartey"
-
+GRAPH_ID = "graph1"
 pixela_endpoint = "https://pixe.la/v1/users"
 load_dotenv()
 TOKEN_KEY = os.getenv("token")
@@ -22,7 +22,7 @@ user_params = {
 
 graph_endpoint =f"{pixela_endpoint}/{USERNAME}/graphs"
 graph_config = {
-    "id": "graph1",
+    "id": GRAPH_ID,
     "name": "5k graph",
     "unit": "Km",
     "type": "float",
@@ -34,5 +34,12 @@ headers = {
     "X-USER-TOKEN": TOKEN_KEY
 }
 
-response = requests.post(url=graph_endpoint, json=graph_config, headers=headers)
+graph_placement_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}"
+placement_config = {
+    "date":"20260103",
+    "quantity": "3.5"
+}
+
+response = requests.post(url=graph_placement_endpoint, json=placement_config, headers=headers)
 print(response.text)
+
