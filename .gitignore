@@ -2,3 +2,4 @@
 .env
 /WeatherAlert/keys.env
 /HabitTracker/keys.env
+/GoogleSheetsTracking/keys.env
