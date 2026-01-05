@@ -1,3 +1,4 @@
 /password-manager-start/password.json
 .env
 /WeatherAlert/keys.env
+/HabitTracker/keys.env
