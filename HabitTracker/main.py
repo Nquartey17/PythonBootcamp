@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from datetime import datetime
 
 # view graph here -> "https://pixe.la/v1/users/nquartey/graphs/graph1.html"
 USERNAME = "nquartey"
@@ -34,9 +35,11 @@ headers = {
     "X-USER-TOKEN": TOKEN_KEY
 }
 
+today = datetime.now()
+
 graph_placement_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}"
 placement_config = {
-    "date":"20260103",
+    "date": today.strftime("%Y%m%d"),
     "quantity": "3.5"
 }
 
