@@ -40,9 +40,21 @@ today = datetime.now()
 graph_placement_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}"
 placement_config = {
     "date": today.strftime("%Y%m%d"),
-    "quantity": "3.5"
+    "quantity": "5"
 }
 
-response = requests.post(url=graph_placement_endpoint, json=placement_config, headers=headers)
+#update graph point
+update_endpoint = f"{graph_endpoint}/graph1/{today.strftime('%Y%m%d')}"
+update_config = {
+    "quantity": "4.3"
+}
+#
+# response = requests.put(url=update_endpoint, json=update_config, headers=headers)
+# print(response.text)
+
+#delete graph point
+delete_endpoint = f"{graph_endpoint}/graph1/{today.strftime('%Y%m%d')}"
+
+response = requests.delete(url=update_endpoint, headers=headers)
 print(response.text)
 
