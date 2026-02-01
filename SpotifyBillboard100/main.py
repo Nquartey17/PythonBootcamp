@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Billboard pro needed to see previous years on website
+# Project incomplete, Spotify developer create app button unavailable
 year = input("What year do you want to travel to? Enter format as YYYY-MM-DD: ")
 
 url = "https://www.billboard.com/charts/hot-100/" + year
