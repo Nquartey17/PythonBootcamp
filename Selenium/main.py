@@ -24,5 +24,16 @@ print(documentation_link.text)
 bug_link = driver.find_element(By.XPATH, value='//*[@id="site-map"]/div[2]/div/ul/li[3]/a')
 print(bug_link.text)
 
+event_times = driver.find_elements(By.CSS_SELECTOR, value=".event-widget time")
+event_names = driver.find_elements(By.CSS_SELECTOR, value=".event-widget li a")
+events_dict = {
+    n: {
+        "time": event_times[n].text,
+        "name": event_names[n].text
+    }
+    for n in range(len(event_times))
+}
+print(events_dict)
+
 #.close() will close tab, .quit() will close entire webpage
 driver.quit()
