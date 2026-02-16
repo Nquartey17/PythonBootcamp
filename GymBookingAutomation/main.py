@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+import time
 
 #Don't delete unversioned files
 ACCOUNT_EMAIL = "niikwarteiq@test.com"
@@ -40,9 +41,11 @@ submit_button.click()
 
 wait.until(ec.presence_of_element_located((By.ID, "schedule-page")))
 
-#Book the next Tuesday 6pm class day-group-today/-tomorrow/-tue
-#Idea: if today is tuesday: today. if tomorrow: -tomorrow, else: -tue
+#Book the next Tuesday 6pm class
 class_cards = driver.find_elements(By.CSS_SELECTOR, "div[id^='class-card-']")
+booked_classes = 0
+waitlists = 0
+already_booked_count = 0
 
 for card in class_cards:
     # Get the day title from the parent day group
@@ -60,13 +63,25 @@ for card in class_cards:
             # Find and click the book button
             button = card.find_element(By.CSS_SELECTOR, "button[id^='book-button-']")
             if button.text == "Waitlisted":
+                already_booked_count += 1
                 print(f"✓ Already on waitlist: {class_name} on {day_title}")
             elif button.text == "Join Waitlist":
                 button.click()
+                waitlists += 1
                 print(f"✓ Joined waitlist for: {class_name} on {day_title}")
+                time.sleep(0.5) #Wait for button status to update
             elif button.text == "Booked":
+                already_booked_count += 1
                 print(f"✓ Already booked: {class_name} on {day_title}")
             else:
                 button.click()
+                booked_classes += 1
                 print(f"✓ Booked: {class_name} on {day_title}")
+                time.sleep(0.5)  # Wait for button status to update
 
+
+print("--- BOOKING SUMMARY ---\n"
+      f"Classes booked: {booked_classes}\n"
+      f"Waitlists joined: {waitlists}\n"
+      f"Already booked/waitlisted: {already_booked_count}\n"
+      f"Total Tuesday 6pm classes processed: {booked_classes + waitlists + already_booked_count}")
