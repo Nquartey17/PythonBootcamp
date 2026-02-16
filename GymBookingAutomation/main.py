@@ -3,8 +3,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from selenium.common import NoSuchElementException
-from datetime import date, datetime, timedelta
 
 #Don't delete unversioned files
 ACCOUNT_EMAIL = "niikwarteiq@test.com"
@@ -61,6 +59,14 @@ for card in class_cards:
 
             # Find and click the book button
             button = card.find_element(By.CSS_SELECTOR, "button[id^='book-button-']")
-            button.click()
+            if button.text == "Waitlisted":
+                print(f"✓ Already on waitlist: {class_name} on {day_title}")
+            elif button.text == "Join Waitlist":
+                button.click()
+                print(f"✓ Joined waitlist for: {class_name} on {day_title}")
+            elif button.text == "Booked":
+                print(f"✓ Already booked: {class_name} on {day_title}")
+            else:
+                button.click()
+                print(f"✓ Booked: {class_name} on {day_title}")
 
-            print(f"✓ Booked: {class_name} on {day_title}")
