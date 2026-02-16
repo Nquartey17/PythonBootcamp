@@ -66,4 +66,3 @@ while current_cycles < end_cycles:
 
     current_cycles += 1
     print(f"Current cycles: {current_cycles}")
-
