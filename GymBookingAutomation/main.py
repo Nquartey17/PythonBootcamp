@@ -46,6 +46,7 @@ class_cards = driver.find_elements(By.CSS_SELECTOR, "div[id^='class-card-']")
 booked_classes = 0
 waitlists = 0
 already_booked_count = 0
+detailed_classes = []
 
 for card in class_cards:
     # Get the day title from the parent day group
@@ -53,7 +54,7 @@ for card in class_cards:
     day_title = day_group.find_element(By.TAG_NAME, "h2").text
 
     # Check if this is a Tuesday
-    if "Tue" in day_title:
+    if "Tue" in day_title or "Thu" in day_title:
         # Check if this is a 6pm class
         time_text = card.find_element(By.CSS_SELECTOR, "p[id^='class-time-']").text
         if "6:00 PM" in time_text:
@@ -62,21 +63,27 @@ for card in class_cards:
 
             # Find and click the book button
             button = card.find_element(By.CSS_SELECTOR, "button[id^='book-button-']")
+
+            class_info = f"{class_name} on {day_title}"
             if button.text == "Waitlisted":
                 already_booked_count += 1
                 print(f"✓ Already on waitlist: {class_name} on {day_title}")
+                detailed_classes.append(f"• [Currently Waitlisted] " + class_info)
             elif button.text == "Join Waitlist":
                 button.click()
                 waitlists += 1
-                print(f"✓ Joined waitlist for: {class_name} on {day_title}")
+                print(f"✓ Joined waitlist for: {class_name}: {day_title}")
+                detailed_classes.append(f"• [New Waitlist] " + class_info)
                 time.sleep(0.5) #Wait for button status to update
             elif button.text == "Booked":
                 already_booked_count += 1
                 print(f"✓ Already booked: {class_name} on {day_title}")
+                detailed_classes.append(f"• [Currently Booked] " + class_info)
             else:
                 button.click()
                 booked_classes += 1
                 print(f"✓ Booked: {class_name} on {day_title}")
+                detailed_classes.append(f"• [New Booking] " + class_info)
                 time.sleep(0.5)  # Wait for button status to update
 
 
@@ -84,4 +91,8 @@ print("--- BOOKING SUMMARY ---\n"
       f"Classes booked: {booked_classes}\n"
       f"Waitlists joined: {waitlists}\n"
       f"Already booked/waitlisted: {already_booked_count}\n"
-      f"Total Tuesday 6pm classes processed: {booked_classes + waitlists + already_booked_count}")
+      f"Total Tuesday & Thursday 6pm classes processed: {booked_classes + waitlists + already_booked_count}")
+
+print("--- DETAILED CLASS LIST ---")
+for status in detailed_classes:
+    print(status)
