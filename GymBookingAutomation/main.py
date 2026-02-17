@@ -1,5 +1,6 @@
 import os
 from selenium import webdriver
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -23,23 +24,48 @@ chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 driver = webdriver.Chrome(options=chrome_options)
 driver.get(GYM_URL)
 
+# Used admin controls to create 50% network errors
+# In case of network error, creating a retry function
+def retry(func, retries=7, description=None):
+    for i in range(retries):
+        print(f"Trying {description}. Attempt: {i + 1}")
+        try:
+            return func()
+        except TimeoutException:
+            if i == retries - 1:
+                raise
+            time.sleep(1)
+
+
+
 #Wait for website to load
 wait = WebDriverWait(driver,10)
 
-#Wait for login button then click
-login_btn = wait.until(ec.element_to_be_clickable((By.ID, "login-button")))
-login_btn.click()
+def login():
+    #Wait for login button then click
+    login_btn = wait.until(ec.element_to_be_clickable((By.ID, "login-button")))
+    login_btn.click()
 
-email_input = driver.find_element(By.NAME, "email")
-email_input.send_keys(ACCOUNT_EMAIL)
+    email_input = driver.find_element(By.NAME, "email")
+    email_input.clear() #Clear text box in network error
+    email_input.send_keys(ACCOUNT_EMAIL)
 
-password_input = driver.find_element(By.NAME, "password")
-password_input.send_keys(ACCOUNT_PASSWORD)
+    password_input = driver.find_element(By.NAME, "password")
+    password_input.clear()
+    password_input.send_keys(ACCOUNT_PASSWORD)
 
-submit_button = driver.find_element(By.ID, "submit-button")
-submit_button.click()
+    submit_button = driver.find_element(By.ID, "submit-button")
+    submit_button.click()
 
-wait.until(ec.presence_of_element_located((By.ID, "schedule-page")))
+    wait.until(ec.presence_of_element_located((By.ID, "schedule-page")))
+
+# Verify booking click goes through in case of network error
+def book_class(booking_button):
+    booking_button.click()
+    # Wait for button state to change - will time out if booking failed
+    wait.until(lambda d: booking_button.text == "Booked" or booking_button.text == "Waitlisted")
+
+retry(login, description="login")
 
 #Book the next Tuesday 6pm class
 class_cards = driver.find_elements(By.CSS_SELECTOR, "div[id^='class-card-']")
@@ -70,6 +96,7 @@ for card in class_cards:
                 print(f"✓ Already on waitlist: {class_name} on {day_title}")
                 detailed_classes.append(f"• [Currently Waitlisted] " + class_info)
             elif button.text == "Join Waitlist":
+                retry(lambda: book_class(button), description="Waitlisting")
                 button.click()
                 waitlists += 1
                 print(f"✓ Joined waitlist for: {class_name}: {day_title}")
@@ -80,6 +107,7 @@ for card in class_cards:
                 print(f"✓ Already booked: {class_name} on {day_title}")
                 detailed_classes.append(f"• [Currently Booked] " + class_info)
             else:
+                retry(lambda: book_class(button), description="Booking")
                 button.click()
                 booked_classes += 1
                 print(f"✓ Booked: {class_name} on {day_title}")
@@ -96,3 +124,4 @@ print("--- BOOKING SUMMARY ---\n"
 print("--- DETAILED CLASS LIST ---")
 for status in detailed_classes:
     print(status)
+
