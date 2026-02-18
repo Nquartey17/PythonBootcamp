@@ -9,7 +9,26 @@ def hello_world():
             "<img src=https://media.tenor.com/IN-qCk4y0KgAAAAM/explosion-bombing-explosion.gif>"
             )
 
+def make_bold(function):
+    def wrapper():
+        return "<b>" + function() + "</b>"
+    return wrapper
+
+def make_embedded(function):
+    def wrapper():
+        return "<em>" + function() + "</em>"
+    return wrapper
+
+def make_underline(function):
+    def wrapper():
+        return "<u>" + function() + "</u>"
+    return wrapper
+
+
 @app.route("/bye")
+@make_bold
+@make_underline
+@make_embedded
 def say_bye():
     return "Bye"
 
