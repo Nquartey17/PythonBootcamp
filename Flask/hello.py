@@ -4,7 +4,10 @@ app = Flask(__name__)
 
 @app.route("/") # hello_world will activate if user tries to react home page (/)
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return ("<h1 style='text=align': center>Hello, World!</h1>"
+            "<p>This is a paragraph</p>"
+            "<img src=https://media.tenor.com/IN-qCk4y0KgAAAAM/explosion-bombing-explosion.gif>"
+            )
 
 @app.route("/bye")
 def say_bye():
