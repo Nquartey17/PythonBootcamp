@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
 {% include "header.html" %}
-    <body>
+
 
         <!-- Page Header-->
         <header class="masthead" style="background-image: url('../static/assets/img/unsplash.jpg')">
@@ -23,7 +21,7 @@
                     <!-- Post preview-->
                     {% for article in posts: %}
                     <div class="post-preview">
-                        <a href="post.html">
+                        <a href="{{ url_for('post', card_id=article['id']) }}">
                             <h2 class="post-title">{{ article["title"] }}</h2>
                             <h3 class="post-subtitle">{{ article["subtitle"] }}</h3>
                         </a>
@@ -44,7 +42,3 @@
         </div>
 
         {% include "footer.html" %}
-
-       </body>
-
-</html>
